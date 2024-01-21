@@ -8,7 +8,7 @@ from langchain.prompts.chat import ChatPromptTemplate
 from sqlalchemy import create_engine
 import os
 
-os.environ["OPENAI_API_KEY"] = "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"
+os.environ["OPENAI_API_KEY"] = "API_Key"
 st.set_page_config(page_title="AI APP TO CHAT WITH SQL DB")
 st.header="ASK ANYTHING ABOUT YOUR DB"
 query=st.text_input("ask question here")
