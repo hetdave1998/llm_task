@@ -7,6 +7,8 @@ from langchain.sql_database import SQLDatabase
 from langchain.prompts.chat import ChatPromptTemplate
 from langchain.llms import CTransformers
 from sqlalchemy import create_engine
+from langchain.llms import LlamaCpp
+from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 import os
 
 
@@ -19,7 +21,28 @@ cs="mysql+pymysql://llmtask:1234@localhost:3306/final_llm_task"
 db_engine=create_engine(cs)
 db=SQLDatabase(db_engine)
 config = {'max_new_tokens': 256, 'repetition_penalty': 1.1, 'temperature': 0, 'context_length': 10000}
+
+
+
 llm=llm = CTransformers(model="TheBloke/CodeLlama-7B-Instruct-GGUF",  model_file="codellama-7b-instruct.Q4_K_M.gguf",config=config, verbose=True) #--local path can be added here of selected models.
+
+#--------Use this code if Ctransformers model take too much time
+
+# callback_manager = CallbackManager([StreamingStdOutCallbackHandler()])
+ 
+# n_gpu_layers = 1
+# n_batch = 512
+# llm = LlamaCpp(
+# model_path="./models/llama-2-7b-chat.Q8_0.gguf",
+# n_gpu_layers=n_gpu_layers,
+# n_batch=n_batch,
+# n_ctx=4000,
+# f16_kv=True,
+# callback_manager=callback_manager, 
+# verbose=True,
+# )
+
+
 sql_toolkit=SQLDatabaseToolkit(db=db,llm=llm)
 sql_toolkit.get_tools()
 
